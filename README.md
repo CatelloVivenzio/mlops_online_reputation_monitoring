@@ -18,7 +18,7 @@ MachineInnovators Inc. è un sistema scalabile per il monitoraggio della reputaz
 
 ### Fase 1: Implementazione Modello & API
 - Sviluppo di un backend con **FastAPI** per servire il modello `twitter-roberta-base-sentiment-latest`.
-- Creazione di un'interfaccia frontend in **HTML5/JavaScript** per l'interazione utente.
+- Creazione di un'interfaccia frontend in **HTML5/CSS** per l'interazione utente.
 - Containerizzazione dell'intera applicazione tramite **Docker**.
 
 ### Fase 2: Pipeline CI/CD

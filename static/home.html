@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MachineInnovators | Reputation Monitor</title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --bg: #f8fafc;
+            --text: #1e293b;
+            --card: #ffffff;
+            --pos: #22c55e;
+            --neg: #ef4444;
+            --neu: #64748b;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: var(--card);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h1 { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--primary); margin-top: 0; }
+        p { font-size: 0.875rem; color: #64748b; margin-bottom: 1.5rem; }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            resize: none;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+
+        textarea:focus { outline: none; border-color: var(--primary); }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        button:hover { opacity: 0.9; }
+
+        .result-card {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid transparent;
+        }
+
+        .sentiment-label { font-weight: 600; font-size: 1.1rem; text-transform: uppercase; }
+        .confidence-bar { height: 6px; background: #e2e8f0; border-radius: 10px; margin-top: 8px; overflow: hidden; }
+        .confidence-fill { 
+            height: 100%; 
+            /* Valori di default che verranno sovrascritti */
+            width: var(--bar-width, 0%); 
+            background-color: var(--bar-color, #ccc);
+            transition: width 0.5s ease-out;
+        }
+
+        /* Classi dinamiche iniettate dal server */
+        .res-positive { background: #f0fdf4; color: var(--pos); border-color: #bbf7d0; }
+        .res-negative { background: #fef2f2; color: var(--neg); border-color: #fecaca; }
+        .res-neutral { background: #f1f5f9; color: var(--neu); border-color: #e2e8f0; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Machine Innovators Inc.</h1>
+    <p>Sentiment Analysis Engine v1.0</p>
+
+    <!-- Form HTML Standard: invia i dati al server ricaricando la pagina -->
+    <form method="post" action="/">
+        <textarea name="text" id="textInput" placeholder="Insert client feedback" required>{{ text if text else '' }}</textarea>
+    
+        <div style="display: flex; gap: 10px; margin-top: 1rem; align-items: stretch;">
+            <button type="submit" style="flex: 3; margin: 0;">Analyze reputation</button>
+            <a href="/" style="flex: 1; background-color: #e2e8f0; color: #475569; padding: 12px; border-radius: 8px; font-weight: 600; text-decoration: none; text-align: center; font-size: 0.9rem; display: flex; align-items: center; justify-content: center;">
+                Clear
+            </a>
+        </div>
+    </form>
+
+    {% if label %}
+        <div class="result-card res-{{ label.lower() }}" 
+            style="--bar-width: {{ conf_val }}%; --bar-color: var(--{{ sentiment_key }});">
+            <div class="sentiment-label">{{ label }}</div>
+            <div style="font-size: 0.8rem; margin-top: 4px;">Confidence: {{ confidence }}</div>
+            <div class="confidence-bar">
+                <div class="confidence-fill"></div>
+            </div>
+        </div>
+    {% endif %}
+    <!-- Link alla documentazione API -->
+    <div style="margin-top: 2rem; border-top: 1px solid #e2e8f0; padding-top: 1rem; text-align: center;">
+        <p style="margin-top: 1rem; font-size: 0.75rem;">
+            Technical interface: 
+            <a href="/docs" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: 600;">
+                Interactive API Docs (Swagger) ↗
+            </a>
+        </p>
+    </div>
+</div>
+
+</body>
+</html>
