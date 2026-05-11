@@ -1,0 +1,18 @@
+# API e Server
+fastapi
+uvicorn
+python-multipart
+
+# Machine Learning e NLP
+transformers
+torch
+scipy
+
+# Monitoraggio e Analisi
+pandas
+evidently
+huggingface_hub
+
+# Testing
+pytest
+httpx
