@@ -1,0 +1,26 @@
+name: CD - Continuous Deployment
+
+on:
+  push:
+    branches: [ feature/cd_pipeline ]
+
+jobs:
+  # --- FASE 3: DISTRIBUZIONE CONTINUA (CD) ---
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout del codice
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        lfs: true
+
+    - name: Push su Hugging Face Spaces
+      env:
+        HF_TOKEN: ${{ secrets.HUGGING_FACE_TOKEN }}
+      run: |
+        # Configura il puntamento remoto temporaneo verso lo Spazio Hugging Face
+        git remote add hf https://catellovivenzio:$HF_TOKEN@huggingface.co/spaces/catellovivenzio/MachineInnovators-ReputationMonitor
+        
+        # Forza il push del contenuto attuale del branch sul main di Hugging Face
+        git push --force hf HEAD:main
