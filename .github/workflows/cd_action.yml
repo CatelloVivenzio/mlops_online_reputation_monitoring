@@ -19,8 +19,8 @@ jobs:
       env:
         HF_TOKEN: ${{ secrets.HUGGING_FACE_TOKEN }}
       run: |
-        # Configura il puntamento remoto temporaneo verso lo Spazio Hugging Face
-        git remote add hf https://catellovivenzio:$HF_TOKEN@huggingface.co/spaces/catellovivenzio/MachineInnovators-ReputationMonitor
+        # Configura il puntamento remoto verso lo Spazio Hugging Face
+        git remote add hf https://CatelloVivenzio:$HF_TOKEN@huggingface.co/spaces/LelloVivenzio/reputation_monitor_machine_innovators
         
         # Forza il push del contenuto attuale del branch sul main di Hugging Face
         git push --force hf HEAD:main
