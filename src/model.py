@@ -23,9 +23,23 @@ class SentimentModel:
     def __init__(self):
 
         """
-        Inizializza la pipeline di sentiment-analysis per il modello.
+        Inizializza la pipeline di sentiment-analysis per il modello e supabase client.
 
         """
+        
+        supabase_url = os.getenv("SUPABASE_URL")
+        supabase_key = os.getenv("SUPABASE_KEY")
+        
+        self.supabase = None
+        if supabase_url and supabase_key:
+            try:
+                # Se le chiavi sono presenti ma malformate 
+                # create_client potrebbe sollevare un'eccezione
+                self.supabase = create_client(supabase_url, supabase_key)
+            except Exception as e:
+                print(f"[SUPABASE INIT ERROR] Invalid or malformed keys: {e}")
+        else:
+            print("[SUPABASE INIT WARNING] Credentials not found in the environment.")
         
         self.analyzer = pipeline("sentiment-analysis", model=MODEL_PATH)
 
