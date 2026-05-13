@@ -2,7 +2,7 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop, feature/monitoring_system ]
   pull_request:
     branches: [ develop ]
 
@@ -25,6 +25,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    # --- Creazione del file .env
+    - name: Creazione file .env per Supabase
+      run: |
+        echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" >> .env
+        echo "SUPABASE_KEY=${{ secrets.SUPABASE_KEY }}" >> .env
+
     - name: Esecuzione Test di Integrazione
       env:
         PYTHONPATH: .
@@ -35,6 +41,7 @@ jobs:
   deploy:
     needs: test # Il deploy parte solo se i test vanno in successo
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop' # Il deploy parte solo se i test vanno in successo
     steps:
     - name: Checkout del codice
       uses: actions/checkout@v4
