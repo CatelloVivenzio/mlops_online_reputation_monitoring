@@ -43,3 +43,12 @@ MachineInnovators Inc. è un sistema scalabile per il monitoraggio della reputaz
 3. Attivare l'ambiente: `.\venv\Scripts\activate`
 4. Installare le dipendenze: `pip install -r requirements.txt`
 
+## 📖 Documentazione di Riferimento
+Per approfondimenti sullo sviluppo e sulle tecnologie integrate nel progetto, consultare le documentazioni ufficiali:
+- **FastAPI Framework**: [FastAPI Documentation](https://fastapi.tiangolo.com/) per la gestione e l'estensione delle API di inferenza.
+- **Hugging Face Transformers**: [Transformers Docs](https://huggingface.co/docs/transformers/index) per l'ottimizzazione del modello.
+- **Jinja2 Template Engine**: [Jinja Documentation](https://jinja.palletsprojects.com/en/stable/templates/) per la gestione e il rendering dinamico delle pagine HTML sul frontend.
+- **Evidently AI**: [Evidently Docs](https://docs.evidentlyai.com/) per l'implementazione del monitoraggio del Data Drift e delle metriche di performance.
+- **GitHub Actions**: [GitHub Actions Quickstart](https://docs.github.com/de/actions/get-started/quickstart) per la configurazione dei flussi CI/CD e l'automazione dei test.
+
+

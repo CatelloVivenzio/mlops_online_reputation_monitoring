@@ -6,10 +6,10 @@ from src.model import model_instance
 
 app = FastAPI(title="MachineInnovators - Reputation Monitor")
 
-# Monta la cartella static per i file
+# Monta la cartella static per il file HTML
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Configura Jinja2 per leggere i file HTML nella cartella static
+# Configura Jinja2 per leggere il file HTML nella cartella static
 templates = Jinja2Templates(directory="static")
 
 @app.get("/", response_class=HTMLResponse)
