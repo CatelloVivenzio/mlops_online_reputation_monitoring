@@ -87,6 +87,39 @@ Il server FastAPI espone automaticamente la documentazione interattiva completa 
 
 ---
 
+## Guida all'Avvio del Progetto
+
+Il progetto può essere eseguito e testato sia in locale sul proprio PC sia in produzione.
+
+### Esecuzione in Locale
+
+Assicurarsi di aver configurato il file `.env` nella root del progetto. Successivamente eseguire questi passaggi dal terminale:
+
+1. **Attivare l'ambiente virtuale:**
+   * **Windows (PowerShell):** `.\venv\Scripts\Activate.ps1`
+   * **Linux / macOS:** `source venv/bin/activate`
+
+2. **Avviare il Server dell'Applicazione (API & Interfaccia):**
+   ```bash
+   uvicorn src.api:app --reload
+   ```
+
+3. **Lanciare il Monitoraggio del Data Drift (Manuale):**
+   Per estrarre i dati correnti da Supabase e calcolare il report statistico rispetto alla baseline, eseguire:
+   ```bash
+   python src/monitoring.py
+   ```
+   Il report interattivo verra' generato e salvato nel percorso `static/drift_report.html`.
+
+### Esecuzione su Hugging Face Spaces (Produzione)
+
+L'applicazione e' configurata per essere distribuita all'interno di un container Docker isolato.
+
+* **Deployment Continuo**: Grazie alla pipeline unica di GitHub Actions configurata in `.github/workflows/ci_cd.yml`, ogni modifica validata e inviata tramite `git push` sui branch principali (`develop` o `main`) compila l'immagine Docker ed esegue il deployment automatico sullo Space.
+* **Configurazione Cloud**: Per garantire il corretto funzionamento delle funzionalita' di log e monitoraggio, le chiavi `SUPABASE_URL` e `SUPABASE_KEY` devono essere inserite manualmente nella sezione **Settings > Variables and secrets** della dashboard dello Space su Hugging Face.
+
+---
+
 ## Documentazione di Riferimento
 Per approfondimenti sullo sviluppo e sulle tecnologie integrate nel progetto, consultare le documentazioni ufficiali:
 - **FastAPI Framework**: [FastAPI Documentation](https://fastapi.tiangolo.com/) per la gestione e l'estensione delle API di inferenza.
