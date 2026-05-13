@@ -2,9 +2,9 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ develop, feature/monitoring_system ]
+    branches: [ develop, main ]
   pull_request:
-    branches: [ develop ]
+    branches: [ develop, main ]
 
 jobs:
   # --- FASE 2: INTEGRATION CONTINUA (CI) ---
@@ -41,7 +41,6 @@ jobs:
   deploy:
     needs: test # Il deploy parte solo se i test vanno in successo
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/develop' # Il deploy parte solo se i test vanno in successo
     steps:
     - name: Checkout del codice
       uses: actions/checkout@v4
