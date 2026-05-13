@@ -1,6 +1,15 @@
+import os
 from transformers import pipeline
+from dotenv import load_dotenv
+from supabase import create_client, Client
 
 MODEL_PATH = "cardiffnlp/twitter-roberta-base-sentiment-latest"
+# Carica le variabili dal file .env
+load_dotenv()
+# Inizializzazione globale del client Supabase
+supabase_url = os.getenv("SUPABASE_URL")
+supabase_key = os.getenv("SUPABASE_KEY")
+supabase: Client = create_client(supabase_url, supabase_key) if supabase_url and supabase_key else None
 
 class SentimentModel:
 
@@ -34,6 +43,22 @@ class SentimentModel:
             
         result = self.analyzer(text)[0]
         confidence_pct = round(float(result['score']) * 100, 1)
+
+        # Inserimento automatico su supabase
+        if supabase:
+            try:
+                supabase.table("feedback_logs").insert({
+                    "text": text,
+                    "label": result['label'].lower(), # Assicura consistenza con gli import di Evidently
+                    "score": result['score'] # Rispetta il vincolo NOT NULL della colonna 'score'
+                }).execute()
+                print(f"[SUPABASE LOG] Record salvato con successo per il testo: {text[:20]}...")
+            except Exception as e:
+                # Cattura l'errore a log senza far crashare l'interfaccia utente
+                print(f"[SUPABASE ERROR] Impossibile salvare la predizione sul database: {e}")
+        else:
+            print("[SUPABASE WARNING] Client non inizializzato: credenziali mancanti nell'ambiente.")
+
         
         return {
             "label": result['label'],
