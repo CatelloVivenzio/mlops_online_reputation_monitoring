@@ -1,5 +1,5 @@
 ---
-title: MachineInnovators - Reputation Monitor
+title: Machine Innovators - Reputation Monitor
 emoji: 🚀
 colorFrom: green
 colorTo: blue
