@@ -10,9 +10,14 @@ scipy
 
 # Monitoraggio e Analisi
 pandas
+numpy>=2.2.0,<2.3.0
 evidently
 huggingface_hub
+requests
 
 # Testing
 pytest
 httpx
+
+# Data
+supabase==2.13.0
