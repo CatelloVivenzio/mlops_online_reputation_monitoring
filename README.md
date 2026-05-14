@@ -5,6 +5,7 @@ colorFrom: green
 colorTo: blue
 sdk: docker
 app_port: 8000
+python_version: 3.12
 ---
 
 # MachineInnovators Inc. - Sentiment Analysis & MLOps
