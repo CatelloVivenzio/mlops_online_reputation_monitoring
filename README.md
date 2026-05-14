@@ -65,8 +65,12 @@ Per consentire agli esaminatori di testare l'applicazione senza esporre chiavi p
 ## Documentazione Interattiva delle API (FastAPI)
 Il server FastAPI espone automaticamente la documentazione interattiva completa di tutte le rotte di inferenza e monitoraggio. Una volta avviato il server in locale (di default su `http://localhost:8000`), gli esaminatori possono testare gli endpoint tramite i seguenti link ufficiali:
 
-* **Swagger UI (Raccomandato)**: [http://localhost:8000/docs](http://localhost:8000/docs) – Consente di testare le chiamate API (es. invio tweet e predizione sentiment) direttamente dal browser tramite un'interfaccia grafica interattiva.
-* **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc) – Offre una documentazione pulita e dettagliata, per la lettura approfondita degli schemi dei dati e dei codici di risposta HTTP.
+* **Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs) – Consente di testare le chiamate API (es. invio tweet e predizione sentiment) direttamente dal browser tramite un'interfaccia grafica interattiva.
+* **Report**: [http://localhost:8000/report](http://localhost:8000/report) – Dashboard interattiva di monitoraggio MLOps generata in tempo reale tramite **Evidently AI**. 
+L'endpoint calcola e visualizza i report di **Data Drift** sulla colonna di testo in input e di **Target Drift** sulla distribuzione delle etichette di sentiment predette. 
+
+Il sistema confronta i dati storici salvati in tempo reale nel database su **Supabase** con un dataset di baseline basato su i dati di validation split di `tweet_eval` estratti dinamicamente da **Hugging Face**. 
+Permette di rilevare deviazioni statistiche e anomalie strutturali del testo come ad esempio variazioni nella lunghezza o presenza di parole fuori dizionario, facendo da indicatore preventivo del degrado delle performance del modello in produzione.
 
 ---
 

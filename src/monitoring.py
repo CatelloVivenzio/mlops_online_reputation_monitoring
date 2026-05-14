@@ -121,12 +121,12 @@ def generate_drift_report():
         text_report = Report(metrics=[DataDriftPreset(columns=["text"])])
         
         # Esegue il calcolo del drift
-        text_report.run(reference_data=reference_df, current_data=current_df)
+        report_result = text_report.run(reference_data=reference_df, current_data=current_df)
         
         # Salva l'output in formato HTML nella cartella static
         os.makedirs("static", exist_ok=True)
         output_html = "static/drift_report.html"
-        text_report.save_html(output_html)
+        report_result.save_html(output_html)
         
         print(f"[MONITORING SUCCESS] Data Drift Report successfully saved to: '{output_html}'")
         
