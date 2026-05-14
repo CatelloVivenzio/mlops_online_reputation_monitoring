@@ -1,0 +1,56 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ develop, main ]
+  pull_request:
+    branches: [ develop, main ]
+
+jobs:
+  # --- FASE 2: INTEGRATION CONTINUA (CI) ---
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout del codice
+      uses: actions/checkout@v4
+
+    - name: Configurazione Python 3.13
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
+        cache: 'pip'
+
+    - name: Installazione Dipendenze
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    # --- Creazione del file .env
+    - name: Creazione file .env per Supabase
+      run: |
+        echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" >> .env
+        echo "SUPABASE_KEY=${{ secrets.SUPABASE_KEY }}" >> .env
+
+    - name: Esecuzione Test di Integrazione
+      env:
+        PYTHONPATH: .
+      run: |
+        pytest
+
+  # --- FASE 3: DISTRIBUZIONE CONTINUA (CD) ---
+  deploy:
+    needs: test # Il deploy parte solo se i test vanno in successo
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout del codice
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        lfs: true
+
+    - name: Push su Hugging Face Spaces
+      env:
+        HF_TOKEN: ${{ secrets.HUGGING_FACE_TOKEN }}
+      run: |
+        git remote add hf https://CatelloVivenzio:$HF_TOKEN@huggingface.co/spaces/LelloVivenzio/reputation_monitor_machine_innovators
+        git push --force hf HEAD:main
