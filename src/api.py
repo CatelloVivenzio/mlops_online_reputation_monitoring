@@ -2,11 +2,28 @@ from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from src.model import model_instance
 from src.monitoring import generate_drift_report
 import os
+from src.model import SentimentModel
+from contextlib import asynccontextmanager  
 
-app = FastAPI(title="MachineInnovators - Reputation Monitor")
+model_container = {}
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Gestisce il ciclo di vita dell'applicazione.
+    Carica il modello in memoria solo dopo l'avvio del server, evitando blocchi.
+    """
+    print("[LIFESPAN] Avvio del server in corso... Inizializzazione del modello Sentiment.")
+    # Inizializza il modello in modo sicuro all'interno del contesto dell'applicazione
+    model_container["model"] = SentimentModel()
+    print("[LIFESPAN SUCCESS] Modello caricato correttamente in memoria. Server pronto.")
+    yield
+    # Logica opzionale di pulizia allo spegnimento
+    model_container.clear()
+
+app = FastAPI(title="MachineInnovators - Reputation Monitor", lifespan=lifespan)
 
 # Monta la cartella static per il file HTML
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -63,6 +80,12 @@ async def analyze(request: Request, text: str = Form(...)):
     Riceve il testo dal Form e restituisce i risultati.
     
     """
+
+    # Recuperia l'istanza salvata nel container del ciclo di vita
+    model_instance = model_container.get("model")
+    
+    if not model_instance:
+        return HTMLResponse(content="<h3>Error: Model not ready yet.</h3>", status_code=503)
 
     prediction = model_instance.predict(text)
 

@@ -3,7 +3,10 @@ from transformers import pipeline
 from dotenv import load_dotenv
 from supabase import create_client, Client
 
-MODEL_PATH = "cardiffnlp/twitter-roberta-base-sentiment-latest"
+# --- GESTIONE DINAMICA DEL MODELLO ---
+ORIGINAL_MODEL_PATH = "cardiffnlp/twitter-roberta-base-sentiment-latest"
+FINE_TUNED_MODEL_PATH = "src/models/fine_tuned_roberta/"
+# -----------------------------------------------------------
 
 # Carica le variabili dal file .env
 load_dotenv()
@@ -41,7 +44,15 @@ class SentimentModel:
         else:
             print("[SUPABASE INIT WARNING] Credentials not found in the environment.")
         
-        self.analyzer = pipeline("sentiment-analysis", model=MODEL_PATH)
+        # --- MODIFICA MLOPS FASE 3: CARICAMENTO DINAMICO ---
+        # Controlla se la pipeline di retraining ha salvato un modello aggiornato localmente
+        if os.path.exists(FINE_TUNED_MODEL_PATH) and os.listdir(FINE_TUNED_MODEL_PATH):
+            print(f"[MODEL MLOps] Trovato modello riaddestrato localmente! Caricamento da: {FINE_TUNED_MODEL_PATH}")
+            self.analyzer = pipeline("sentiment-analysis", model=FINE_TUNED_MODEL_PATH, tokenizer=FINE_TUNED_MODEL_PATH)
+        else:
+            print(f"[MODEL MLOps] Nessun modello locale trovato. Caricamento modello originale da Hugging Face: {ORIGINAL_MODEL_PATH}")
+            self.analyzer = pipeline("sentiment-analysis", model=ORIGINAL_MODEL_PATH)
+        # ---------------------------------------------------
 
     def predict(self, text: str):
 
@@ -85,4 +96,4 @@ class SentimentModel:
 # Istanza globale del modello (Singleton) per ottimizzare 
 # l'uso delle risorse.
 # Viene importata in api.py per gestire le richieste degli utenti.
-model_instance = SentimentModel()
+#model_instance = SentimentModel()
