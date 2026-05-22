@@ -53,4 +53,4 @@ jobs:
         HF_TOKEN: ${{ secrets.HUGGING_FACE_TOKEN }}
       run: |
         git remote add hf https://CatelloVivenzio:$HF_TOKEN@huggingface.co/spaces/LelloVivenzio/reputation_monitor_machine_innovators
-        git push hf HEAD:main
+        git push hf HEAD:main --force
